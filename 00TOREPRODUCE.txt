@@ -11,6 +11,16 @@ See the 00README.txt in this directory for more information.
 
 Reproducing the tests and results:
 
+These steps show to reproduce the results in this directory that were
+referred to in 00README.txt. The output files will be written to the
+current working directory and to a new directory called
+'repro-r100'. The cmsearch output files from infernal will be written
+in 'repro-r100'.
+
+When I perfomed the test, I completed these steps in this directory
+but using an output directory called 'r100'. You can find the cmsearch
+output from the searches I performed in that directory.
+
 1. Start with the list of 100 randomly chosen genomes used in the
    earlier tests described on April 3, 2015 in JIRA ticket
    GP-10960. (See
@@ -32,7 +42,6 @@ Reproducing the tests and results:
    For example:
    Actinobacillus_ureae_ATCC_25976	/panfs/pan1.be-md.ncbi.nlm.nih.gov/gpipe/bacterial_pipeline/data19/Actinobacillus_ureae_ATCC_25976/244828-DENOVO-20150227-1622.1478424/output/bacterial_annot/AEVG01.annotation.nucleotide.fa
 
-   
 2. Download the Rfam 12.0 models:
    > wget ftp://ftp.ebi.ac.uk/pub/databases/Rfam/12.0/Rfam.cm.gz
    > gunzip Rfam.cm.gz
@@ -43,13 +52,13 @@ Reproducing the tests and results:
    > perl list2qsub.pl
    usage: perl list2qsub.pl <list file> <output directory (must not yet exist)> at list2qsub.pl line 2.
 
-   > perl list2qsub.pl r100.genome.list r100 > r100.qsub
+   > perl list2qsub.pl r100.genome.list repro-r100 > repro-r100.qsub
 
    The cluster jobs will use Infernal 1.1.1 executables in /usr/local/infernal/1.1.1/bin/
 
 4. Submit the search jobs. 
    
-   > sh r100.qsub
+   > sh repro-r100.qsub
 
 5. Remove overlapping hits from the search results.
    
@@ -72,7 +81,7 @@ Reproducing the tests and results:
                        overlaps, and outputs all hits again except the
                        overlap hits that were removed.
                       
-   > ls r100/*.tbl | perl make-deoverlap.pl > deoverlap.sh
+   > ls repro-r100/*.tbl | perl make-deoverlap.pl > deoverlap.sh
    > sh deoverlap.sh
 
 6. Count the hits that are in the two categories: 
@@ -101,8 +110,8 @@ Reproducing the tests and results:
 
    And we need separate lists for archaea and bacteria.
    
-   > perl list2tbllist.pl r100.archaea.4.genome.list r100 > archaea.deoverlapped.tbl.list
-   > perl list2tbllist.pl r100.bacteria.96.genome.list r100 > bacteria.deoverlapped.tbl.list
+   > perl list2tbllist.pl r100.archaea.4.genome.list repro-r100 > archaea.deoverlapped.tbl.list
+   > perl list2tbllist.pl r100.bacteria.96.genome.list repro-r100 > bacteria.deoverlapped.tbl.list
    
    Now, we can run the script that counts the hits:
 
@@ -119,7 +128,7 @@ Reproducing the tests and results:
 7. Calculate total elapsed running time for all searches using the
      sum-time.pl script.
   
-   > cat r100/*.time | perl sum-time.pl > r100.time
+   > cat repro-r100/*.time | perl sum-time.pl > repro-r100.time
 
    > cat r100.time
    Total   time: 50:23:20.46 (hh:mm:ss) (100 genomes)
