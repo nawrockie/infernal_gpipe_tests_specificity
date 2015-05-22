@@ -1,0 +1,126 @@
+EPN, Fri May 22 11:03:51 2015
+
+Instructions on how to reproduce tests of Infernal/Rfam specificity
+for possible GPIPE expansion of Rfam annotation.
+
+Related JIRA ticket: GP-10960.
+GitHub URL: https://github.com/nawrockie/infernal_gpipe_tests_specificity.git
+
+See the 00README.txt in this directory for more information.
+-------------------------------------------------------------------------
+
+Reproducing the tests and results:
+
+1. Start with the list of 100 randomly chosen genomes used in the
+   earlier tests described on April 3, 2015 in JIRA ticket
+   GP-10960. (See
+   /home/nawrocke/pickup/inf1p0-inf1p1-rfam11-rfam12-gpipe-test-040315/step2-get-genomes.pl)
+
+   I've divided this file into two different files, one with a list of
+   the 96 genomes that are bacteria and one with a list of the 4 that
+   are archaea:
+   
+   Files: 
+   r100.genome.list:             100 archaea+bacteria
+   r100.archaea.4.genome.list:     4 archaea
+   r100.bacteria.96.genome.list:  96 bacteria
+
+   All 3 of these files describe one genome per line. Each line has
+   two columns. The first is the name of the genome, the second is the
+   path to the fasta sequence for the genome.
+   
+   For example:
+   Actinobacillus_ureae_ATCC_25976	/panfs/pan1.be-md.ncbi.nlm.nih.gov/gpipe/bacterial_pipeline/data19/Actinobacillus_ureae_ATCC_25976/244828-DENOVO-20150227-1622.1478424/output/bacterial_annot/AEVG01.annotation.nucleotide.fa
+
+   
+2. Download the Rfam 12.0 models:
+   > wget ftp://ftp.ebi.ac.uk/pub/databases/Rfam/12.0/Rfam.cm.gz
+   > gunzip Rfam.cm.gz
+
+3. Create a shell script to submit the 100 searches to the cluster
+   using the list2qsub.pl script. The script takes two arguments: 
+
+   > perl list2qsub.pl
+   usage: perl list2qsub.pl <list file> <output directory (must not yet exist)> at list2qsub.pl line 2.
+
+   > perl list2qsub.pl r100.genome.list r100 > r100.qsub
+
+   The cluster jobs will use Infernal 1.1.1 executables in /usr/local/infernal/1.1.1/bin/
+
+4. Submit the search jobs. 
+   
+   > sh r100.qsub
+
+5. Remove overlapping hits from the search results.
+   
+   Overlaps are removed using the following simple rule:
+   for any two hits by different CMs that overlap by >= 1 nucleotide
+   in the same sequence, remove the one with the worse (higher) E-value.
+   (Note that in Infernal output no two hits by the same CM will ever
+   overlap.)
+
+   The script that does this requires that the hits be sorted by
+   E-value.
+
+   There are two relevant scripts here:
+   make-deoverlap.pl: this script creates a shell script that will
+                      execute remove-overlaps.pl for all 100 genomes.
+                      It takes as input a list of the .tbl files 
+                      created by the searches run in step 4.
+
+   remove-overlaps.pl: given a list of hits sorted by E-value, removes
+                       overlaps, and outputs all hits again except the
+                       overlap hits that were removed.
+                      
+   > ls r100/*.tbl | perl make-deoverlap.pl > deoverlap.sh
+   > sh deoverlap.sh
+
+6. Count the hits that are in the two categories: 
+
+   For bacteria: 
+   YES category: any hit by one of the 616 models that have >= 1 SEED
+                 and >= 1 FULL bacterial sequence in Rfam 12.0.
+   NO  category: any hit by one of the 1834 models that DO NOT have 
+                 >= 1 SEED and >= 1 FULL bacterial sequences in Rfam
+                 12.0.
+
+   For archaea:
+   YES category: any hit by one of the 96 models that have >= 1 SEED
+                 and >= 1 FULL bacterial sequence in Rfam 12.0.
+   NO  category: any hit by one of the 2354 models that DO NOT have 
+                 >= 1 SEED and >= 1 FULL bacterial sequences in Rfam
+                 12.0.
+
+
+   This is done using the count-hits.pl script:
+   > perl count-hits.pl 
+   usage: perl count-hits.pl <list of tblout files> <accession list file 1> <accession list file 2>
+
+   First, we need to create a list of the tblout files that have
+   overlaps removed which we created in step 5.
+
+   And we need separate lists for archaea and bacteria.
+   
+   > perl list2tbllist.pl r100.archaea.4.genome.list r100 > archaea.deoverlapped.tbl.list
+   > perl list2tbllist.pl r100.bacteria.96.genome.list r100 > bacteria.deoverlapped.tbl.list
+   
+   Now, we can run the script that counts the hits:
+
+   > perl count-hits.pl bacteria.deoverlapped.tbl.list bacteria.yes.list bacteria.no.list > bacteria.counts
+   > perl count-hits.pl archaea.deoverlapped.tbl.list archaea.yes.list archaea.no.list > archaea.counts
+
+   And to count the hits to the 30 current GPIPE models (dummy.list is
+   an empty file):
+   > perl count-hits.pl bacteria.deoverlapped.tbl.list GPIPE.30.list dummy.list > bacteria.GPIPE30.counts
+   > perl count-hits.pl archaea.deoverlapped.tbl.list GPIPE.30.list dummy.list > archaea.GPIPE30.counts
+
+7. Calculate total elapsed running time for all searches using the
+     sum-time.pl script.
+  
+   > cat r100/*.time | perl sum-time.pl > r100.time
+
+   > cat r100.time
+   Total   time: 50:23:20.46 (hh:mm:ss) (100 genomes)
+   Average time:  0:30:14.00 (hh:mm:ss)
+
+

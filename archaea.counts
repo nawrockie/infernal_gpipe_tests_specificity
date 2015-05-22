@@ -1,0 +1,21 @@
+# accession	accn-listed-in-archaea.yes.list	accn-listed-in-archaea.no.list
+RF00001	3	0
+RF00005	138	0
+RF00373	3	0
+RF01120	1	0
+RF01139	1	0
+RF01140	1	0
+RF01144	1	0
+RF01145	1	0
+RF01150	1	0
+RF01304	1	0
+RF01312	2	0
+RF01337	56	0
+RF01734	1	0
+RF01857	3	0
+RF01959	3	0
+RF02163	1	0
+RF02540	3	0
+total-hits	220	0
+total-fams	17	0
+# families with zero hits in both columns were not printed
