@@ -1,29 +1,29 @@
-# accession	accn-listed-in-GPIPE.30.list	accn-listed-in-dummy.list
-RF00001	355	0
-RF00010	78	0
-RF00050	73	0
-RF00113	30	0
-RF00114	24	0
-RF00162	93	0
-RF00167	46	0
-RF00174	170	0
-RF00230	244	0
-RF00382	9	0
-RF00391	53	0
-RF00504	58	0
-RF00557	22	0
-RF00558	18	0
-RF00559	16	0
-RF01051	46	0
-RF01394	21	0
-RF01405	11	0
-RF01497	14	0
-RF01766	75	0
-RF01782	56	0
-RF01832	8	0
-RF01859	26	0
-RF02228	148	0
-RF02276	5	0
-total-hits	1699	0
-total-fams	25	0
-# families with zero hits in both columns were not printed
+#accession         num-hits
+RF00001                 355
+RF00010                  78
+RF00050                  73
+RF00113                  30
+RF00114                  24
+RF00162                  93
+RF00167                  46
+RF00174                 170
+RF00230                 244
+RF00382                   9
+RF00391                  53
+RF00504                  58
+RF00557                  22
+RF00558                  18
+RF00559                  16
+RF01051                  46
+RF01394                  21
+RF01405                  11
+RF01497                  14
+RF01766                  75
+RF01782                  56
+RF01832                   8
+RF01859                  26
+RF02228                 148
+RF02276                   5
+total-hits             1699
+total-fams-with-hits     25
+# families with zero hits were not printed

@@ -1,6 +1,6 @@
-# accession	accn-listed-in-GPIPE.30.list	accn-listed-in-dummy.list
-RF00001	3	0
-RF00373	3	0
-total-hits	6	0
-total-fams	2	0
-# families with zero hits in both columns were not printed
+#accession         num-hits
+RF00001                   3
+RF00373                   3
+total-hits                6
+total-fams-with-hits      2
+# families with zero hits were not printed

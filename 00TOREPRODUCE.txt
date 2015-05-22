@@ -1,4 +1,4 @@
-EPN, Fri May 22 11:03:51 2015
+EPN, Fri May 22 2015
 
 Instructions on how to reproduce tests of Infernal/Rfam specificity
 for possible GPIPE expansion of Rfam annotation.
@@ -106,13 +106,15 @@ Reproducing the tests and results:
    
    Now, we can run the script that counts the hits:
 
-   > perl count-hits.pl bacteria.deoverlapped.tbl.list bacteria.yes.list bacteria.no.list > bacteria.counts
-   > perl count-hits.pl archaea.deoverlapped.tbl.list archaea.yes.list archaea.no.list > archaea.counts
+   > perl count-hits.pl bacteria.deoverlapped.tbl.list bacteria.yes.list > bacteria.yes.counts
+   > perl count-hits.pl bacteria.deoverlapped.tbl.list bacteria.no.list > bacteria.no.counts
+   > perl count-hits.pl archaea.deoverlapped.tbl.list archaea.yes.list > archaea.yes.counts
+   > perl count-hits.pl archaea.deoverlapped.tbl.list archaea.no.list > archaea.no.counts
 
    And to count the hits to the 30 current GPIPE models (dummy.list is
    an empty file):
-   > perl count-hits.pl bacteria.deoverlapped.tbl.list GPIPE.30.list dummy.list > bacteria.GPIPE30.counts
-   > perl count-hits.pl archaea.deoverlapped.tbl.list GPIPE.30.list dummy.list > archaea.GPIPE30.counts
+   > perl count-hits.pl bacteria.deoverlapped.tbl.list GPIPE.30.list > bacteria.GPIPE30.counts
+   > perl count-hits.pl archaea.deoverlapped.tbl.list GPIPE.30.list > archaea.GPIPE30.counts
 
 7. Calculate total elapsed running time for all searches using the
      sum-time.pl script.
