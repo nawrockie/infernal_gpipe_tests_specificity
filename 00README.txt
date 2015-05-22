@@ -15,6 +15,7 @@ Sections of this file:
 - What I did to carry out the tests
 - Bacterial results
 - Archaeal results 
+- Running time results
 - Conclusions
 - Recommendations
 - Further investigation of 18 hits to 'bacteria-no' models
@@ -138,6 +139,15 @@ roughly 40-fold.
 For a full list of number of archaeal hits to each model,
 see the archaea.counts file. For a list of those to the 30 current
 GPIPE Rfam models, see archaea.GPIPE30.counts.
+
+----------------------------------------------------------------------
+
+Running time results:
+
+The total elapsed time for 100 searches of all 2450 Rfam models
+against the 100 genomes took about 50 CPU hours. The file
+r100.time reports this, and was created with the command 'cat
+r100/*.time | perl sum-time.pl > r100.time'
 
 -----------------------------------------------------------------------
 
